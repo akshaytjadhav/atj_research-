@@ -1,0 +1,1502 @@
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy: #1a2744;
+    --gold: #c8973a;
+    --gold-light: #f0d79a;
+    --teal: #1d7a68;
+    --teal-light: #d4f0ea;
+    --cream: #faf8f3;
+    --ink: #2c2c2a;
+    --muted: #6b6860;
+    --border: rgba(44,44,42,0.12);
+    --accent-red: #c0392b;
+    --accent-green: #1d6a3a;
+  }
+
+  body { font-family: 'Source Serif 4', Georgia, serif; background: var(--cream); color: var(--ink); font-size: 15px; line-height: 1.75; }
+
+  /* Top nav */
+  .top-bar {
+    background: var(--navy);
+    color: #fff;
+    padding: 14px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .top-bar h1 { font-family: 'Playfair Display', Georgia, serif; font-size: 16px; color: var(--gold-light); letter-spacing: .3px; }
+  .chapter-pills { display: flex; gap: 6px; flex-wrap: wrap; }
+  .pill {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: rgba(255,255,255,0.85);
+    font-family: 'Source Serif 4', serif;
+    font-size: 11px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background .15s;
+    font-weight: 400;
+  }
+  .pill:hover, .pill.active { background: var(--gold); color: var(--navy); border-color: var(--gold); }
+
+  /* Sections */
+  .section { display: none; padding: 0 0 60px; }
+  .section.active { display: block; }
+
+  /* Chapter header */
+  .chapter-header {
+    background: linear-gradient(135deg, var(--navy) 0%, #2a3f6b 100%);
+    color: #fff;
+    padding: 48px 40px 40px;
+    margin-bottom: 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .chapter-header::before {
+    content: '';
+    position: absolute;
+    right: -40px; top: -40px;
+    width: 220px; height: 220px;
+    border-radius: 50%;
+    background: rgba(200,151,58,0.08);
+  }
+  .chapter-num { font-size: 11px; color: var(--gold); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; font-family: 'Source Serif 4', serif; }
+  .chapter-header h2 { font-family: 'Playfair Display', Georgia, serif; font-size: 30px; color: #fff; line-height: 1.2; margin-bottom: 10px; }
+  .chapter-lead { color: rgba(255,255,255,0.75); font-size: 15px; max-width: 560px; font-style: italic; }
+
+  /* Content wrapper */
+  .content { max-width: 760px; margin: 0 auto; padding: 40px 32px; }
+
+  /* Cards */
+  .card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px 28px;
+    margin: 24px 0;
+  }
+  .card.gold-border { border-left: 4px solid var(--gold); }
+  .card.teal-border { border-left: 4px solid var(--teal); }
+  .card.red-border { border-left: 4px solid var(--accent-red); }
+  .card.green-border { border-left: 4px solid var(--accent-green); }
+
+  h3 { font-family: 'Playfair Display', serif; font-size: 20px; color: var(--navy); margin: 32px 0 12px; }
+  h4 { font-size: 15px; font-weight: 600; color: var(--navy); margin: 20px 0 8px; }
+  p { margin: 12px 0; color: var(--ink); }
+  strong { font-weight: 600; color: var(--navy); }
+
+  /* Analogy boxes */
+  .analogy {
+    background: #fffbef;
+    border: 1px solid #e8d88a;
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin: 16px 0;
+    font-size: 14px;
+  }
+  .analogy-label { font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--gold); font-weight: 600; margin-bottom: 6px; }
+
+  /* Warning boxes */
+  .warning-box {
+    background: #fff5f5;
+    border: 1px solid #f0bcbc;
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin: 16px 0;
+    font-size: 14px;
+  }
+  .warning-label { font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--accent-red); font-weight: 600; margin-bottom: 6px; }
+
+  /* Tip boxes */
+  .tip-box {
+    background: #f0faf7;
+    border: 1px solid #9ddccf;
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin: 16px 0;
+    font-size: 14px;
+  }
+  .tip-label { font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--teal); font-weight: 600; margin-bottom: 6px; }
+
+  /* Myth boxes */
+  .myth-box {
+    background: #f9f5ff;
+    border: 1px solid #c8aff0;
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin: 16px 0;
+    font-size: 14px;
+  }
+  .myth-label { font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; color: #7c3aed; font-weight: 600; margin-bottom: 6px; }
+
+  /* Tables */
+  .table-wrap { overflow-x: auto; margin: 20px 0; border-radius: 10px; border: 1px solid var(--border); }
+  table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+  th { background: var(--navy); color: #fff; padding: 11px 14px; text-align: left; font-weight: 600; font-family: 'Source Serif 4', serif; }
+  td { padding: 10px 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  tr:last-child td { border-bottom: none; }
+  tr:nth-child(even) td { background: rgba(200,151,58,0.04); }
+
+  /* Steps */
+  .steps { counter-reset: step; }
+  .step-item { display: flex; gap: 16px; margin: 16px 0; align-items: flex-start; }
+  .step-num {
+    min-width: 34px; height: 34px;
+    background: var(--navy);
+    color: var(--gold-light);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 600;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .step-content { flex: 1; }
+  .step-title { font-weight: 600; color: var(--navy); margin-bottom: 4px; }
+
+  /* Flow arrows */
+  .flow { display: flex; flex-direction: column; gap: 0; margin: 20px 0; }
+  .flow-item {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 18px;
+    font-size: 14px;
+    position: relative;
+  }
+  .flow-item.active-flow { border-color: var(--teal); background: var(--teal-light); }
+  .flow-arrow { text-align: center; color: var(--muted); font-size: 18px; line-height: 1; padding: 2px 0; }
+
+  /* Badges */
+  .badge { display: inline-block; font-size: 11px; padding: 3px 9px; border-radius: 20px; font-weight: 600; margin: 2px; }
+  .badge-gold { background: #fef3cd; color: #856404; }
+  .badge-teal { background: var(--teal-light); color: var(--teal); }
+  .badge-red { background: #fde8e8; color: var(--accent-red); }
+  .badge-green { background: #e6f7ee; color: var(--accent-green); }
+  .badge-purple { background: #f3e8ff; color: #6d28d9; }
+  .badge-navy { background: #e8ecf5; color: var(--navy); }
+
+  /* Checklist */
+  .checklist { list-style: none; padding: 0; }
+  .checklist li { display: flex; gap: 10px; align-items: flex-start; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 14px; }
+  .checklist li:last-child { border-bottom: none; }
+  .check-icon { color: var(--teal); font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+
+  /* Grid */
+  .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin: 16px 0; }
+  .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin: 16px 0; }
+
+  .mini-card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+    font-size: 13.5px;
+  }
+  .mini-card-title { font-weight: 600; color: var(--navy); margin-bottom: 6px; font-size: 14px; }
+
+  /* Roadmap timeline */
+  .timeline { position: relative; padding-left: 36px; }
+  .timeline::before { content: ''; position: absolute; left: 12px; top: 8px; bottom: 8px; width: 2px; background: var(--border); }
+  .tl-item { position: relative; margin: 20px 0; }
+  .tl-dot {
+    position: absolute; left: -30px; top: 4px;
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    background: var(--navy);
+    border: 3px solid var(--cream);
+    box-shadow: 0 0 0 2px var(--navy);
+  }
+  .tl-dot.gold { background: var(--gold); box-shadow: 0 0 0 2px var(--gold); }
+  .tl-dot.teal { background: var(--teal); box-shadow: 0 0 0 2px var(--teal); }
+  .tl-phase { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin-bottom: 4px; }
+  .tl-title { font-weight: 600; color: var(--navy); margin-bottom: 4px; }
+
+  /* Progress bar decoration */
+  .progress-bar { height: 6px; background: var(--border); border-radius: 3px; margin: 12px 0; overflow: hidden; }
+  .progress-fill { height: 100%; border-radius: 3px; background: var(--teal); }
+
+  /* Q bands */
+  .q-band { display: flex; border-radius: 8px; overflow: hidden; margin: 12px 0; font-size: 13px; }
+  .q-item { flex: 1; padding: 10px; text-align: center; font-weight: 600; }
+  .q1 { background: #1a6b3c; color: #fff; }
+  .q2 { background: #2d9e6b; color: #fff; }
+  .q3 { background: #f0a500; color: #fff; }
+  .q4 { background: #c0392b; color: #fff; }
+
+  /* Divider */
+  .divider { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
+
+  /* Resource links */
+  .resource-item { display: flex; align-items: flex-start; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border); font-size: 14px; }
+  .resource-icon { font-size: 20px; flex-shrink: 0; }
+
+  /* Paper structure box */
+  .paper-structure { display: grid; gap: 2px; }
+  .ps-item { display: flex; align-items: stretch; }
+  .ps-label { min-width: 160px; background: var(--navy); color: var(--gold-light); padding: 10px 14px; font-size: 13px; font-weight: 600; }
+  .ps-desc { flex: 1; background: #fff; border: 1px solid var(--border); border-left: none; padding: 10px 14px; font-size: 13px; }
+
+  @media (max-width: 600px) {
+    .chapter-header { padding: 32px 20px 28px; }
+    .content { padding: 24px 16px; }
+    .chapter-header h2 { font-size: 22px; }
+    .ps-label { min-width: 110px; }
+  }
+</style>
+
+<div class="top-bar">
+  <h1>📚 Engineering Research Publication Handbook</h1>
+  <div class="chapter-pills">
+    <div class="pill active" onclick="showSection('basics')">Basics</div>
+    <div class="pill" onclick="showSection('types')">Types</div>
+    <div class="pill" onclick="showSection('databases')">Databases</div>
+    <div class="pill" onclick="showSection('journals')">Journals</div>
+    <div class="pill" onclick="showSection('process')">Process</div>
+    <div class="pill" onclick="showSection('writing')">Writing</div>
+    <div class="pill" onclick="showSection('ethics')">Ethics</div>
+    <div class="pill" onclick="showSection('profiles')">Profiles</div>
+    <div class="pill" onclick="showSection('conferences')">Conferences</div>
+    <div class="pill" onclick="showSection('citations')">Citations</div>
+    <div class="pill" onclick="showSection('roadmap')">Roadmap</div>
+    <div class="pill" onclick="showSection('resources')">Resources</div>
+  </div>
+</div>
+
+<!-- SECTION: BASICS -->
+<div class="section active" id="sec-basics">
+  <div class="chapter-header">
+    <div class="chapter-num">Chapter 1</div>
+    <h2>What is a Research Paper?</h2>
+    <p class="chapter-lead">Understanding research from scratch — as simple as it gets.</p>
+  </div>
+  <div class="content">
+    <h3>Think of it like this</h3>
+    <div class="analogy">
+      <div class="analogy-label">Analogy</div>
+      Imagine you notice that plants grow faster near a music speaker. You experiment, measure, document your process, find results, and share your discovery with the world. That document — with your method, findings, and conclusion — is a research paper.
+    </div>
+
+    <p>A <strong>research paper</strong> is a formal written document where a researcher presents:</p>
+    <div class="card teal-border">
+      <div class="grid-2">
+        <div>
+          <h4>What they studied</h4>
+          <p style="font-size:13.5px">The problem or question they investigated</p>
+        </div>
+        <div>
+          <h4>How they studied it</h4>
+          <p style="font-size:13.5px">The method or experiment they used</p>
+        </div>
+        <div>
+          <h4>What they found</h4>
+          <p style="font-size:13.5px">The results and data they collected</p>
+        </div>
+        <div>
+          <h4>What it means</h4>
+          <p style="font-size:13.5px">Their interpretation and conclusion</p>
+        </div>
+      </div>
+    </div>
+
+    <h3>Why Do People Publish Papers?</h3>
+    <div class="steps">
+      <div class="step-item">
+        <div class="step-num">1</div>
+        <div class="step-content"><div class="step-title">Share knowledge</div>If you solve a problem, others shouldn't have to solve it again from scratch.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">2</div>
+        <div class="step-content"><div class="step-title">Career advancement</div>In academia and research, publications are your "marks." More papers = better job, promotion, funding.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">3</div>
+        <div class="step-content"><div class="step-title">Prove credibility</div>A published paper says: "experts checked my work and it passed." It is peer-validated knowledge.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">4</div>
+        <div class="step-content"><div class="step-title">Get academic degree credit</div>Many universities require papers for PhD, MTech, or even BTech programs.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">5</div>
+        <div class="step-content"><div class="step-title">Attract funding</div>Grants, scholarships, and industry collaborations often require a publication record.</div>
+      </div>
+    </div>
+
+    <div class="myth-box">
+      <div class="myth-label">Common Myth</div>
+      "Only PhD students or professors can publish research." — <strong>False.</strong> Undergraduate and postgraduate students regularly publish papers. As a BTech/BE or MTech student, you can absolutely publish your first paper.
+    </div>
+
+    <h3>The Publication Ecosystem — A Simple Map</h3>
+    <p>Think of research like news. A journalist writes a story → an editor checks it → it gets published in a newspaper → readers read it → other journalists cite it. Research works the same way:</p>
+    <div class="flow">
+      <div class="flow-item active-flow"><strong>Researcher</strong> — does experiment, collects results</div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-item"><strong>Writes a paper</strong> — formats it per journal guidelines</div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-item"><strong>Submits to a journal or conference</strong></div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-item"><strong>Peer review</strong> — experts in the field check the work</div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-item active-flow"><strong>Accepted &amp; Published</strong> — world can read and cite it</div>
+    </div>
+
+    <h3>Realistic Timeline</h3>
+    <div class="card gold-border">
+      <p style="font-size:13.5px">A typical research paper takes <strong>3 to 18 months</strong> from writing to publication. Conferences are faster (2–4 months). Top journals can take 6–18 months. Do not be discouraged — this is completely normal.</p>
+      <div class="progress-bar" style="margin-top:16px">
+        <div class="progress-fill" style="width:60%; background: var(--gold)"></div>
+      </div>
+      <p style="font-size:12px; color:var(--muted)">Average: ~6 months for most indexed journals</p>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION: TYPES -->
+<div class="section" id="sec-types">
+  <div class="chapter-header">
+    <div class="chapter-num">Chapter 2</div>
+    <h2>Types of Publications</h2>
+    <p class="chapter-lead">Journals, conferences, patents, book chapters — what's the difference?</p>
+  </div>
+  <div class="content">
+    <h3>At a Glance</h3>
+    <div class="table-wrap">
+      <table>
+        <tr><th>Type</th><th>What it is</th><th>Best for</th><th>Prestige</th></tr>
+        <tr><td><strong>Research Article</strong></td><td>Original study with new experiments/findings</td><td>New discoveries</td><td><span class="badge badge-green">High</span></td></tr>
+        <tr><td><strong>Review Paper</strong></td><td>Summary and analysis of 50–200 existing papers on a topic</td><td>Understanding a field</td><td><span class="badge badge-green">High</span></td></tr>
+        <tr><td><strong>Conference Paper</strong></td><td>Short paper presented at an event</td><td>Beginners, quick sharing</td><td><span class="badge badge-gold">Medium</span></td></tr>
+        <tr><td><strong>Book Chapter</strong></td><td>One chapter in an edited book</td><td>Detailed topic coverage</td><td><span class="badge badge-gold">Medium</span></td></tr>
+        <tr><td><strong>Patent</strong></td><td>Legal protection for an invention</td><td>Product/technology innovation</td><td><span class="badge badge-teal">Different scale</span></td></tr>
+      </table>
+    </div>
+
+    <h3>Research Article</h3>
+    <div class="card teal-border">
+      <p>The gold standard of research. You conduct original experiments, collect data, analyze it, and report findings that did not exist before. Example: "A new algorithm for detecting cracks in concrete bridges using image processing."</p>
+      <p>Typical length: <strong>4,000–8,000 words.</strong> Contains: Abstract, Introduction, Literature Review, Methodology, Results, Discussion, Conclusion, References.</p>
+    </div>
+
+    <h3>Review Paper</h3>
+    <div class="card teal-border">
+      <p>You read 50–200 papers on a topic, compare them, identify patterns, gaps, and summarize the current state of knowledge. You don't do new experiments — you synthesize existing ones.</p>
+      <div class="analogy">
+        <div class="analogy-label">Analogy</div>
+        A review paper is like a movie critic who watches all films in a genre and writes a comprehensive report — "here's what worked, what didn't, what's missing." You become the expert who saves others from reading 100 papers.
+      </div>
+    </div>
+
+    <h3>Conference Paper</h3>
+    <div class="card gold-border">
+      <p>A shorter paper (4–8 pages typically) submitted to an event (conference). If accepted, you present it there — either in person or virtually. <strong>Great for beginners</strong> because the review process is faster and the bar is somewhat lower than top journals.</p>
+      <p>Think of a conference like a science fair for professionals. Everyone displays their work and discusses it together.</p>
+    </div>
+
+    <h3>Book Chapter</h3>
+    <div class="card gold-border">
+      <p>An editor compiles a book on a topic (e.g., "Advances in Renewable Energy"). They invite researchers to contribute one chapter each. It's collaborative and usually targets a specific audience. Less rigorously peer-reviewed than journal articles.</p>
+    </div>
+
+    <h3>Patent</h3>
+    <div class="card gold-border">
+      <p>A patent is not a research paper — it is a legal document filed with the government that gives you exclusive rights to use or sell your invention for 20 years. Requires: novelty, non-obviousness, industrial applicability.</p>
+      <div class="tip-box">
+        <div class="tip-label">Beginner Tip</div>
+        In India, you can file a patent through the Indian Patent Office (IPO). Universities often help students file at reduced cost. A published patent is counted separately from journal publications.
+      </div>
+    </div>
+
+    <h3>Journal vs Conference Paper — Key Differences</h3>
+    <div class="table-wrap">
+      <table>
+        <tr><th>Factor</th><th>Journal Paper</th><th>Conference Paper</th></tr>
+        <tr><td>Length</td><td>6,000–10,000+ words</td><td>4–8 pages (2,000–3,500 words)</td></tr>
+        <tr><td>Review time</td><td>3–12 months</td><td>1–3 months</td></tr>
+        <tr><td>Depth required</td><td>Very detailed</td><td>Less detail needed</td></tr>
+        <tr><td>Presentation</td><td>Just published online</td><td>Must present at event</td></tr>
+        <tr><td>Prestige</td><td>Generally higher</td><td>Lower but faster</td></tr>
+        <tr><td>For beginners</td><td>Harder</td><td>Easier starting point</td></tr>
+        <tr><td>Can extend later?</td><td>Already complete</td><td>Yes — into full journal paper</td></tr>
+      </table>
+    </div>
+
+    <div class="tip-box">
+      <div class="tip-label">Beginner Strategy</div>
+      Start with a <strong>national or international conference paper</strong>. Once published, you can extend the work with more experiments and submit it as a journal article. This is a very common and accepted practice.
+    </div>
+  </div>
+</div>
+
+<!-- SECTION: DATABASES -->
+<div class="section" id="sec-databases">
+  <div class="chapter-header">
+    <div class="chapter-num">Chapter 3</div>
+    <h2>Databases, Metrics &amp; Indexing</h2>
+    <p class="chapter-lead">Scopus, Web of Science, Impact Factor, H-index, Quartiles — decoded simply.</p>
+  </div>
+  <div class="content">
+
+    <h3>What is Indexing?</h3>
+    <div class="analogy">
+      <div class="analogy-label">Analogy</div>
+      Imagine thousands of books in a library with no catalog. Finding anything is impossible. A library catalog <em>indexes</em> the books — every book gets an entry with title, author, subject, location. Now you can find any book in seconds. Research databases do exactly this for papers: they catalog, organize, and make papers discoverable worldwide.
+    </div>
+    <p>An <strong>indexed journal</strong> means a reputed database has accepted that journal into its system — verifying it meets quality standards.</p>
+
+    <h3>The Major Databases</h3>
+
+    <div class="card teal-border">
+      <h4>Scopus</h4>
+      <p>Run by Elsevier. The world's largest abstract and citation database. Contains ~90 million records from ~26,000 peer-reviewed journals. If a journal is "Scopus indexed," it passed Elsevier's quality check. Very important in India for PhD criteria and university requirements.</p>
+      <p><span class="badge badge-teal">Check at: scopus.com/sources</span></p>
+    </div>
+
+    <div class="card teal-border">
+      <h4>Web of Science (WoS)</h4>
+      <p>Run by Clarivate Analytics. Older and considered slightly more prestigious than Scopus. Has three tiers:</p>
+      <div class="grid-3" style="margin-top:12px">
+        <div class="mini-card">
+          <div class="mini-card-title">SCI</div>
+          Science Citation Index — the oldest, most prestigious list. Top journals only.
+        </div>
+        <div class="mini-card">
+          <div class="mini-card-title">SCIE</div>
+          SCI Expanded — broader, includes more journals. Good quality standard.
+        </div>
+        <div class="mini-card">
+          <div class="mini-card-title">ESCI</div>
+          Emerging Sources CI — newer journals being evaluated. Less prestigious but recognized.
+        </div>
+      </div>
+    </div>
+
+    <div class="card gold-border">
+      <h4>UGC CARE</h4>
+      <p>University Grants Commission — Consortium for Academic and Research Ethics. India-specific approved journal list. Important for Indian university PhD requirements and faculty promotions. Has two groups: <strong>Group I</strong> (whitelist of approved journals) and <strong>Group II</strong> (Scopus/WoS indexed journals automatically qualify).</p>
+    </div>
+
+    <div class="card gold-border">
+      <h4>Google Scholar</h4>
+      <p>Free search engine for academic papers. <strong>Not a quality indexing system</strong> — it crawls and indexes everything including predatory journals, theses, preprints. Very useful for searching papers and tracking citations, but being on Google Scholar does NOT mean a journal is good quality.</p>
+      <div class="warning-box">
+        <div class="warning-label">Important Distinction</div>
+        "My paper is on Google Scholar" ≠ "My paper is indexed in Scopus." These are very different things. Always verify Scopus/WoS indexing separately.
+      </div>
+    </div>
+
+    <div class="card gold-border">
+      <h4>DOI — Digital Object Identifier</h4>
+      <div class="analogy">
+        <div class="analogy-label">Analogy</div>
+        Think of DOI like an Aadhar card number for a research paper. Every published paper gets a unique permanent ID like <code>10.1016/j.energy.2023.127895</code>. No matter where the internet moves or URLs change, this DOI always takes you to that paper.
+      </div>
+      <p>Format: always starts with <strong>10.</strong> followed by numbers and slashes. You can look up any DOI at <strong>doi.org</strong></p>
+    </div>
+
+    <h3>Key Quality Metrics — Simply Explained</h3>
+
+    <div class="card teal-border">
+      <h4>Impact Factor (IF)</h4>
+      <div class="analogy">
+        <div class="analogy-label">Analogy</div>
+        If 100 researchers cite papers from <em>Nature</em> magazine this year, and Nature published 50 papers last year, the Impact Factor is 100/50 = 2. A higher IF means more researchers found the journal's papers useful enough to reference. A journal with IF &gt; 5 is considered quite good. IF &gt; 10 is excellent.
+      </div>
+      <p>Published by Clarivate annually in the "Journal Citation Reports." Only WoS-indexed journals get an official IF.</p>
+    </div>
+
+    <div class="card teal-border">
+      <h4>CiteScore</h4>
+      <p>Scopus's version of Impact Factor. Calculated over 4 years instead of 2. Generally considered to give a more stable and fair measure. A CiteScore of 3.0 is decent; 5+ is strong; 10+ is excellent.</p>
+    </div>
+
+    <div class="card gold-border">
+      <h4>H-index (of an Author)</h4>
+      <div class="analogy">
+        <div class="analogy-label">Analogy</div>
+        If a researcher has an H-index of 15, it means they have <strong>15 papers that have each been cited at least 15 times</strong>. An H-index of 20 as a professor is quite good. Nobel laureates often have H-index 50+. For a student, H-index 2–5 is a solid start.
+      </div>
+      <p>This metric measures an individual researcher's productivity and impact together. A single highly-cited paper doesn't give a very high H-index.</p>
+    </div>
+
+    <h3>Quartiles: Q1, Q2, Q3, Q4</h3>
+    <p>Journals in Scopus are ranked by CiteScore within their subject category. They are then divided into 4 equal groups:</p>
+    <div class="q-band">
+      <div class="q-item q1">Q1<br><small style="font-weight:400">Top 25%</small></div>
+      <div class="q-item q2">Q2<br><small style="font-weight:400">25–50%</small></div>
+      <div class="q-item q3">Q3<br><small style="font-weight:400">50–75%</small></div>
+      <div class="q-item q4">Q4<br><small style="font-weight:400">Bottom 25%</small></div>
+    </div>
+    <div class="analogy">
+      <div class="analogy-label">Analogy</div>
+      Think of it like college rankings. If there are 100 engineering colleges in a state, Q1 journals are like the top 25 colleges — the most prestigious. Q4 journals are like the bottom 25. For career impact, aim for Q1 or Q2 journals in your field.
+    </div>
+    <p>You can check quartile rankings at <strong>scimagojr.com</strong> (for Scopus) — it's free.</p>
+
+    <h3>Indexed vs Non-Indexed Journals</h3>
+    <div class="table-wrap">
+      <table>
+        <tr><th>Feature</th><th>Indexed Journal</th><th>Non-Indexed Journal</th></tr>
+        <tr><td>Quality check</td><td>Passed external validation</td><td>Self-claimed quality</td></tr>
+        <tr><td>Discoverability</td><td>Found worldwide in databases</td><td>Limited reach</td></tr>
+        <tr><td>Citation tracking</td><td>Automatic in Scopus/WoS</td><td>Manual only</td></tr>
+        <tr><td>Academic recognition</td><td>Accepted for PhD, promotions</td><td>Often not accepted</td></tr>
+        <tr><td>Risk of being fake</td><td>Very low</td><td>High risk</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION: JOURNALS -->
+<div class="section" id="sec-journals">
+  <div class="chapter-header">
+    <div class="chapter-num">Chapter 4</div>
+    <h2>Journals, Fees &amp; Predatory Publishers</h2>
+    <p class="chapter-lead">Free vs paid, open access, and how to spot fake journals.</p>
+  </div>
+  <div class="content">
+
+    <h3>Types of Journals by Cost</h3>
+    <div class="grid-2">
+      <div class="mini-card" style="border-top: 3px solid var(--teal)">
+        <div class="mini-card-title">Subscription Journals</div>
+        Readers pay to access papers (via library subscription). Author publishes for free or very low cost. Examples: IEEE journals, Elsevier journals with no APC.
+      </div>
+      <div class="mini-card" style="border-top: 3px solid var(--gold)">
+        <div class="mini-card-title">Open Access (OA) Journals</div>
+        Anyone can read papers for free online. Author (or institution) pays an "Article Processing Charge" (APC). Example: MDPI journals, PLOS ONE.
+      </div>
+      <div class="mini-card" style="border-top: 3px solid var(--navy)">
+        <div class="mini-card-title">Hybrid Journals</div>
+        Normally subscription-based, but authors can pay extra to make their specific article open access. Most Springer and Elsevier journals work this way.
+      </div>
+      <div class="mini-card" style="border-top: 3px solid var(--accent-green)">
+        <div class="mini-card-title">Diamond/Platinum OA</div>
+        Completely free for both readers AND authors. Often run by universities or societies. Example: many IEEE Access articles have APC waivers for certain regions.
+      </div>
+    </div>
+
+    <h3>How Publication Fees Work</h3>
+    <p>The fee paid by authors (or their institution/grant) to make a paper openly accessible is called <strong>APC — Article Processing Charge</strong>.</p>
+    <div class="table-wrap">
+      <table>
+        <tr><th>Journal Tier</th><th>Typical APC</th><th>Examples</th></tr>
+        <tr><td>Top journals (Nature, Science)</td><td>$2,000 – $12,000</td><td>Nature, Cell</td></tr>
+        <tr><td>Good Scopus/WoS journals</td><td>$500 – $2,500</td><td>Elsevier, Springer</td></tr>
+        <tr><td>MDPI journals</td><td>$800 – $2,000</td><td>Sensors, Materials, Energies</td></tr>
+        <tr><td>Predatory journals</td><td>$50 – $500</td><td>(Avoid these)</td></tr>
+        <tr><td>Free journals (subscription model)</td><td>₹0</td><td>Many IEEE, ACM journals</td></tr>
+      </table>
+    </div>
+    <div class="tip-box">
+      <div class="tip-label">Beginner Tip for India</div>
+      Many institutions have library subscriptions that waive APC. Your university may also have agreements with publishers. Always ask your supervisor or library before paying fees yourself. Indian researchers can sometimes get APC waivers by applying to journals directly.
+    </div>
+
+    <h3>Free Options for Beginners</h3>
+    <div class="card green-border">
+      <p>You do NOT need to pay to publish. Many excellent indexed journals are free:</p>
+      <ul style="list-style: none; padding: 0; font-size: 14px;">
+        <li style="padding: 6px 0; border-bottom: 1px solid var(--border)">IEEE Xplore — many IEEE conference papers are free to submit</li>
+        <li style="padding: 6px 0; border-bottom: 1px solid var(--border)">arXiv.org — free preprint server (physics, CS, engineering)</li>
+        <li style="padding: 6px 0; border-bottom: 1px solid var(--border)">ResearchGate — share papers freely after publication</li>
+        <li style="padding: 6px 0">Many Scopus-indexed journals waive fees for authors from developing nations</li>
+      </ul>
+    </div>
+
+    <h3>Predatory / Fake Journals — How to Identify Them</h3>
+    <div class="warning-box">
+      <div class="warning-label">Critical Warning</div>
+      Predatory journals are fake publications that accept any paper (regardless of quality) just to collect your money. Publishing in them can <strong>damage your academic reputation</strong>. Always verify before submitting.
+    </div>
+
+    <h4>Red Flags of Predatory Journals</h4>
+    <div class="steps">
+      <div class="step-item">
+        <div class="step-num">!</div>
+        <div class="step-content"><div class="step-title">Unsolicited spam emails</div>"We are pleased to invite your manuscript..." Random emails you never signed up for.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">!</div>
+        <div class="step-content"><div class="step-title">Acceptance within hours</div>Real peer review takes weeks minimum. If accepted in 1–2 days, it is fake.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">!</div>
+        <div class="step-content"><div class="step-title">Vague or stolen scope</div>Journals that claim expertise in every field: "We cover engineering, medicine, arts, social science..."</div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">!</div>
+        <div class="step-content"><div class="step-title">No editorial board or fake names</div>Editorial board members don't exist or deny being on the board.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">!</div>
+        <div class="step-content"><div class="step-title">Not in Scopus or WoS — but they claim to be</div>Always verify on official databases, not their own website's claim.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">!</div>
+        <div class="step-content"><div class="step-title">Low, suspicious fee</div>₹500–₹2,000 for "publishing" is a major red flag.</div>
+      </div>
+    </div>
+
+    <h4>How to Verify a Journal is Legitimately Indexed</h4>
+    <div class="card gold-border">
+      <div class="steps">
+        <div class="step-item">
+          <div class="step-num">1</div>
+          <div class="step-content">Go to <strong>scopus.com/sources</strong> — search the exact journal title. If it appears with Source ID, it is Scopus indexed.</div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">2</div>
+          <div class="step-content">Go to <strong>mjl.clarivate.com</strong> (Master Journal List) — search for the journal to verify WoS indexing.</div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">3</div>
+          <div class="step-content">Check <strong>scimagojr.com</strong> — it shows Scopus-indexed journals with quartile rankings.</div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">4</div>
+          <div class="step-content">Cross-check <strong>UGC CARE list</strong> at ugccare.unipune.ac.in if you need it for Indian academic purposes.</div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">5</div>
+          <div class="step-content">Google the journal name + "predatory" or check <strong>Beall's List</strong> (beallslist.net) — maintained list of known predatory publishers.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION: PROCESS -->
+<div class="section" id="sec-process">
+  <div class="chapter-header">
+    <div class="chapter-num">Chapter 5</div>
+    <h2>Peer Review &amp; Publication Process</h2>
+    <p class="chapter-lead">What actually happens between submission and publication.</p>
+  </div>
+  <div class="content">
+
+    <h3>What is Peer Review?</h3>
+    <div class="analogy">
+      <div class="analogy-label">Analogy</div>
+      Before a movie releases, it goes through preview screenings where critics and the studio review it. They suggest edits, cuts, reshoots. Only after their approval does it release to the public. Peer review is exactly this for research — except the reviewers are anonymous expert scientists/engineers who check your work for mistakes, gaps, and validity.
+    </div>
+
+    <h3>Step-by-Step: Submission to Publication</h3>
+    <div class="steps">
+      <div class="step-item">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <div class="step-title">Choose a Journal</div>
+          Find a journal that matches your topic, scope, and quality target. Read their "Aims and Scope" page carefully.
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <div class="step-title">Format Your Paper</div>
+          Every journal has an "Author Guidelines" page. Download their template (usually Word or LaTeX). Follow it exactly — font, margins, reference style, abstract length.
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <div class="step-title">Check Plagiarism</div>
+          Run your paper through plagiarism detection software before submission. Aim for below 15% similarity.
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">4</div>
+        <div class="step-content">
+          <div class="step-title">Submit via Editorial System</div>
+          Most journals use systems like ScholarOne, Editorial Manager, or OJS. Create an account, upload your paper.
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">5</div>
+        <div class="step-content">
+          <div class="step-title">Editor's Initial Check (1–4 weeks)</div>
+          The editor-in-chief reads your paper. If it clearly doesn't fit the journal scope, it gets desk rejected here (without review).
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">6</div>
+        <div class="step-content">
+          <div class="step-title">Sent to Peer Reviewers (1–3 months)</div>
+          Editor sends your paper (with your name removed — "blind review") to 2–3 expert reviewers. They read it critically.
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">7</div>
+        <div class="step-content">
+          <div class="step-title">Editor's Decision</div>
+          Based on reviewer feedback, you get one of four decisions:
+          <div class="grid-2" style="margin-top:12px">
+            <div style="background:#e6f7ee; border-radius:8px; padding:10px; font-size:13px"><strong style="color:var(--accent-green)">Accept</strong><br>Rare on first submission. Great news!</div>
+            <div style="background:#fff8e6; border-radius:8px; padding:10px; font-size:13px"><strong style="color:#a06000">Minor Revision</strong><br>Small changes needed. Usually accepted after.</div>
+            <div style="background:#fff3e0; border-radius:8px; padding:10px; font-size:13px"><strong style="color:#c04000">Major Revision</strong><br>Significant rework needed. Resubmit for re-review.</div>
+            <div style="background:#fde8e8; border-radius:8px; padding:10px; font-size:13px"><strong style="color:var(--accent-red)">Reject</strong><br>Not accepted. Can submit elsewhere.</div>
+          </div>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">8</div>
+        <div class="step-content">
+          <div class="step-title">Revise and Resubmit</div>
+          If revisions requested, address each reviewer comment carefully. Write a detailed "Response to Reviewers" document explaining what you changed and why.
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">9</div>
+        <div class="step-content">
+          <div class="step-title">Proofing and Publication</div>
+          After final acceptance, you get page proofs (formatted version). Check for errors, approve, and your paper goes live — first as "Article in Press" then in a journal issue.
+        </div>
+      </div>
+    </div>
+
+    <h3>What Happens After Rejection?</h3>
+    <div class="tip-box">
+      <div class="tip-label">Important: Rejection is Normal</div>
+      Even Nobel Prize winners get papers rejected. The top journals (Nature, Science) reject 90%+ of submissions. Rejection does not mean your work is bad — it often means the fit wasn't right.
+    </div>
+    <div class="steps">
+      <div class="step-item">
+        <div class="step-num">1</div>
+        <div class="step-content">Read the reviewer feedback carefully and without emotion. Write it down.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">2</div>
+        <div class="step-content">Improve your paper based on the feedback.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">3</div>
+        <div class="step-content">Submit to a different (usually slightly lower tier) journal.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">4</div>
+        <div class="step-content">Repeat. Most papers find a home within 2–4 submissions.</div>
+      </div>
+    </div>
+
+    <h3>Types of Peer Review</h3>
+    <div class="table-wrap">
+      <table>
+        <tr><th>Type</th><th>What it means</th><th>Common where</th></tr>
+        <tr><td>Single-blind</td><td>Reviewers know your name; you don't know theirs</td><td>Most common</td></tr>
+        <tr><td>Double-blind</td><td>Neither author nor reviewer knows each other</td><td>Social sciences, some engineering</td></tr>
+        <tr><td>Open review</td><td>Both parties know each other; reviews are public</td><td>Some modern journals</td></tr>
+        <tr><td>Post-publication</td><td>Community reviews after publishing</td><td>Preprint servers</td></tr>
+      </table>
+    </div>
+
+    <h3>Plagiarism</h3>
+    <div class="analogy">
+      <div class="analogy-label">Analogy</div>
+      Submitting someone else's work as your own is plagiarism — like copying a classmate's exam answer sheet and writing your name on it. In research, this is a serious ethical violation that can end careers.
+    </div>
+    <div class="card red-border">
+      <h4>Acceptable Similarity Percentages</h4>
+      <div class="table-wrap">
+        <table>
+          <tr><th>Similarity</th><th>Status</th></tr>
+          <tr><td>0–10%</td><td><span class="badge badge-green">Excellent — Fully original</span></td></tr>
+          <tr><td>11–20%</td><td><span class="badge badge-gold">Acceptable — minor revisions may help</span></td></tr>
+          <tr><td>21–30%</td><td><span class="badge badge-red">Borderline — improve paraphrasing</span></td></tr>
+          <tr><td>&gt;30%</td><td><span class="badge badge-red">High risk — likely rejected, must rewrite</span></td></tr>
+        </table>
+      </div>
+      <p style="font-size:13px; color:var(--muted); margin-top:8px">Note: Reference lists and quotes are usually excluded from plagiarism calculations. These thresholds vary by institution and journal. Aim for under 15% to be safe.</p>
+    </div>
+    <div class="card gold-border">
+      <h4>Turnitin and Plagiarism Tools</h4>
+      <p>Turnitin is the most used software. It compares your paper against billions of web pages, published papers, and student submissions. Your university may give you access. Free alternatives: <strong>iThenticate, PlagScan, Grammarly (limited), DupliChecker</strong>.</p>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION: WRITING -->
+<div class="section" id="sec-writing">
+  <div class="chapter-header">
+    <div class="chapter-num">Chapter 6</div>
+    <h2>Writing Your Research Paper</h2>
+    <p class="chapter-lead">Structure, literature review, writing tips, and how to write even if English isn't your strength.</p>
+  </div>
+  <div class="content">
+    <h3>The Standard Paper Structure</h3>
+    <div class="paper-structure">
+      <div class="ps-item"><div class="ps-label">Title</div><div class="ps-desc">Specific, concise (10–15 words). Should tell what was studied and the main finding or method.</div></div>
+      <div class="ps-item"><div class="ps-label">Abstract</div><div class="ps-desc">150–300 word summary of the entire paper. Covers: problem, method, results, conclusion. Written LAST.</div></div>
+      <div class="ps-item"><div class="ps-label">Keywords</div><div class="ps-desc">5–8 terms that describe your paper's topics. Help search engines find your paper.</div></div>
+      <div class="ps-item"><div class="ps-label">Introduction</div><div class="ps-desc">Why does this problem matter? What exists already? What gap does your work fill? End with your objective.</div></div>
+      <div class="ps-item"><div class="ps-label">Literature Review</div><div class="ps-desc">Survey of previous work on your topic. Show what others did and what was missing that you address.</div></div>
+      <div class="ps-item"><div class="ps-label">Methodology</div><div class="ps-desc">How you did the work. Detailed enough that another researcher can repeat your experiment.</div></div>
+      <div class="ps-item"><div class="ps-label">Results</div><div class="ps-desc">What you found — data, graphs, tables. No interpretation yet. Just the facts.</div></div>
+      <div class="ps-item"><div class="ps-label">Discussion</div><div class="ps-desc">What do the results mean? How do they compare with existing work? Why are they significant?</div></div>
+      <div class="ps-item"><div class="ps-label">Conclusion</div><div class="ps-desc">Summary of contribution. Future work suggestions. No new information here.</div></div>
+      <div class="ps-item"><div class="ps-label">References</div><div class="ps-desc">Every paper, book, website you cited. Follow the journal's citation style precisely.</div></div>
+    </div>
+
+    <h3>Literature Review — In Depth</h3>
+    <div class="analogy">
+      <div class="analogy-label">Analogy</div>
+      Before building a new bridge, an engineer studies all existing bridges: their designs, what worked, what failed, where there are gaps. The literature review is exactly this — you study all previous "bridges" (papers) in your field, then show where your new bridge fills a gap nobody has filled yet.
+    </div>
+    <div class="card teal-border">
+      <h4>How to Write a Literature Review (Step by Step)</h4>
+      <div class="steps">
+        <div class="step-item">
+          <div class="step-num">1</div>
+          <div class="step-content">Search Google Scholar, Scopus, IEEE Xplore for papers on your topic from the last 5–10 years.</div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">2</div>
+          <div class="step-content">Read abstracts first. Download only the 20–30 most relevant papers.</div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">3</div>
+          <div class="step-content">Make a table: Author | Year | Method used | Key finding | Limitation</div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">4</div>
+          <div class="step-content">Group papers by theme or approach. Write paragraphs for each group.</div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">5</div>
+          <div class="step-content">End with: "However, none of these studies addressed [your specific gap], which is the focus of this work."</div>
+        </div>
+      </div>
+    </div>
+
+    <h3>How to Search Papers Effectively</h3>
+    <div class="table-wrap">
+      <table>
+        <tr><th>Database</th><th>Best for</th><th>Free?</th><th>Tip</th></tr>
+        <tr><td>Google Scholar</td><td>Quick search, any topic</td><td>Yes</td><td>Use "cited by" to find related papers</td></tr>
+        <tr><td>Scopus</td><td>Quality papers, citation tracking</td><td>Needs subscription</td><td>Use your university VPN access</td></tr>
+        <tr><td>IEEE Xplore</td><td>Electrical, electronics, CS, AI</td><td>Partial</td><td>Best for engineering topics</td></tr>
+        <tr><td>SpringerLink</td><td>Mechanical, materials, interdisciplinary</td><td>Partial</td><td>Many chapters free to preview</td></tr>
+        <tr><td>Web of Science</td><td>High-quality papers with citation analysis</td><td>Subscription</td><td>Great for review papers</td></tr>
+        <tr><td>Sci-Hub</td><td>Access paywalled papers (gray area legally)</td><td>Yes</td><td>Common in India; ethical debate exists</td></tr>
+        <tr><td>ResearchGate</td><td>Request papers from authors directly</td><td>Yes</td><td>Authors often share their own papers free</td></tr>
+      </table>
+    </div>
+
+    <h3>How to Read a Paper Efficiently</h3>
+    <div class="card gold-border">
+      <div class="steps">
+        <div class="step-item">
+          <div class="step-num">1</div>
+          <div class="step-content"><div class="step-title">Read Title + Abstract (2 min)</div>Decide if it's relevant before investing time.</div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">2</div>
+          <div class="step-content"><div class="step-title">Read Introduction + Conclusion (5 min)</div>Understand what problem they solved and what they found.</div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">3</div>
+          <div class="step-content"><div class="step-title">Scan Figures and Tables (3 min)</div>Results are often best understood visually first.</div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">4</div>
+          <div class="step-content"><div class="step-title">Read Methodology if needed</div>Only dive into methods if you need to replicate or compare.</div>
+        </div>
+      </div>
+    </div>
+
+    <h3>Writing Tips for Non-Native English Speakers</h3>
+    <div class="tip-box">
+      <div class="tip-label">Practical Advice</div>
+      <p>Most research papers are not written in literary English — they follow a very formal, structured style that you can learn with practice.</p>
+    </div>
+    <div class="steps">
+      <div class="step-item">
+        <div class="step-num">1</div>
+        <div class="step-content"><div class="step-title">Use Grammarly (free version)</div>For grammar and spell check while writing.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">2</div>
+        <div class="step-content"><div class="step-title">Read and copy sentence patterns from published papers</div>Notice phrases like "The results indicate that..." "This paper proposes..." Use similar patterns (not copy the content).</div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">3</div>
+        <div class="step-content"><div class="step-title">Write first, polish later</div>Write rough ideas in any language, then translate and refine. Don't try to write perfectly first.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">4</div>
+        <div class="step-content"><div class="step-title">Use DeepL or ChatGPT for language polishing</div>After writing in your own words, use AI tools to improve phrasing — but always understand and verify what you submit.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">5</div>
+        <div class="step-content"><div class="step-title">Ask your supervisor to review</div>That's part of their role. A good supervisor will help you improve language in the first few papers.</div>
+      </div>
+    </div>
+
+    <h3>How to Select a Research Topic</h3>
+    <div class="card teal-border">
+      <div class="steps">
+        <div class="step-item">
+          <div class="step-num">1</div>
+          <div class="step-content"><div class="step-title">Start with what you know</div>Your final year project, coursework area, or lab specialty.</div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">2</div>
+          <div class="step-content"><div class="step-title">Search trending topics</div>Look at recent IEEE, Scopus papers from 2022–2024 in your field. What's being actively studied?</div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">3</div>
+          <div class="step-content"><div class="step-title">Find a gap</div>After reading 20 papers, what problem did they all fail to solve? That's your opportunity.</div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">4</div>
+          <div class="step-content"><div class="step-title">Check feasibility</div>Can you do this with available tools, equipment, data, and time? Be realistic.</div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">5</div>
+          <div class="step-content"><div class="step-title">Discuss with supervisor</div>Always validate your topic with a mentor before investing months of work.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION: ETHICS -->
+<div class="section" id="sec-ethics">
+  <div class="chapter-header">
+    <div class="chapter-num">Chapter 7</div>
+    <h2>Research Ethics &amp; Authorship</h2>
+    <p class="chapter-lead">The rules of honest science — and what happens when they are broken.</p>
+  </div>
+  <div class="content">
+    <h3>The Core Ethics Rules</h3>
+    <div class="steps">
+      <div class="step-item">
+        <div class="step-num">✓</div>
+        <div class="step-content"><div class="step-title">Honesty</div>Report your results exactly as they are. Never "adjust" data to fit your hypothesis.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">✓</div>
+        <div class="step-content"><div class="step-title">No Plagiarism</div>Always cite sources. Never present someone else's ideas or words as your own — even paraphrased ideas need citation.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">✓</div>
+        <div class="step-content"><div class="step-title">No Fabrication or Falsification</div>Inventing data that doesn't exist (fabrication) or manipulating results (falsification) are severe misconduct. Career-ending offenses.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">✓</div>
+        <div class="step-content"><div class="step-title">No Duplicate Submission</div>You cannot submit the same paper to two journals at the same time. Wait for one to decide before submitting elsewhere.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">✓</div>
+        <div class="step-content"><div class="step-title">Declare Conflicts of Interest</div>If funding came from a company, or you have a personal relationship with someone involved — disclose it.</div>
+      </div>
+    </div>
+
+    <h3>Authorship — Who Goes on the Paper?</h3>
+    <div class="table-wrap">
+      <table>
+        <tr><th>Role</th><th>Who is it?</th><th>Responsibilities</th></tr>
+        <tr><td><strong>First Author</strong></td><td>The person who did most of the work — usually the student</td><td>Leads the writing; responsible for majority of content</td></tr>
+        <tr><td><strong>Corresponding Author</strong></td><td>Handles all communication with the journal</td><td>Receives acceptance/rejection, submits on behalf of all</td></tr>
+        <tr><td><strong>Co-author</strong></td><td>Anyone who made significant contribution</td><td>Contributed to design, analysis, writing, or interpretation</td></tr>
+      </table>
+    </div>
+
+    <div class="warning-box">
+      <div class="warning-label">Ghost Authorship and Gift Authorship</div>
+      <p><strong>Gift authorship</strong> = adding a professor's name who contributed nothing just to help get published. Unethical.</p>
+      <p><strong>Ghost authorship</strong> = leaving out someone who did real work. Also unethical.</p>
+      <p>Both violate international publication ethics (COPE guidelines). Only add authors who genuinely contributed.</p>
+    </div>
+
+    <h3>Self-Plagiarism — A Common Trap for Students</h3>
+    <div class="card red-border">
+      <p>Reusing large sections of your own previously published work without citation is also considered plagiarism (called "text recycling" or "self-plagiarism"). Always cite your own previous papers if you use content from them. A maximum of 10–20% overlap from your own work is typically acceptable.</p>
+    </div>
+
+    <h3>COPE — Committee on Publication Ethics</h3>
+    <p>The international governing body for research ethics in publishing. Most reputable journals follow COPE guidelines. You can report ethical violations at <strong>publicationethics.org</strong>.</p>
+  </div>
+</div>
+
+<!-- SECTION: PROFILES -->
+<div class="section" id="sec-profiles">
+  <div class="chapter-header">
+    <div class="chapter-num">Chapter 8</div>
+    <h2>Researcher Profiles &amp; IDs</h2>
+    <p class="chapter-lead">ORCID, ResearchGate, Google Scholar Profile, Scopus Author ID — why you need them.</p>
+  </div>
+  <div class="content">
+    <div class="analogy">
+      <div class="analogy-label">Analogy</div>
+      A researcher profile is like your LinkedIn for academics. It shows your papers, citations, collaborators, and impact — all in one place. Journals, hiring committees, and collaborators look at these profiles.
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <tr><th>Profile</th><th>What it is</th><th>Why you need it</th><th>Who runs it</th></tr>
+        <tr><td><strong>ORCID</strong></td><td>Unique 16-digit researcher ID (like 0000-0001-2345-6789)</td><td>Mandatory for most journal submissions</td><td>Non-profit consortium</td></tr>
+        <tr><td><strong>Google Scholar</strong></td><td>Public profile showing all your papers and citations</td><td>Most visible to the world; free</td><td>Google</td></tr>
+        <tr><td><strong>ResearchGate</strong></td><td>Academic social network; share papers, ask questions</td><td>Connect with researchers; share papers freely</td><td>ResearchGate GmbH</td></tr>
+        <tr><td><strong>Scopus Author ID</strong></td><td>Auto-assigned by Scopus when you publish</td><td>Tracks Scopus citations and H-index officially</td><td>Elsevier</td></tr>
+        <tr><td><strong>Publons / WoS Researcher</strong></td><td>Tracks peer reviews and WoS publications</td><td>Shows contribution to peer review process</td><td>Clarivate</td></tr>
+      </table>
+    </div>
+
+    <h3>ORCID — The Most Important One</h3>
+    <div class="card teal-border">
+      <p>Create your ORCID at <strong>orcid.org</strong> — it's free and takes 5 minutes. Link all your papers to it. Many journals will ask for your ORCID ID during submission. It ensures your papers are always linked to you, even if your name is common (imagine 50 researchers all named "Rahul Kumar" — ORCID distinguishes each one).</p>
+    </div>
+
+    <h3>Google Scholar Profile</h3>
+    <div class="card gold-border">
+      <p>Once you have a paper published, go to <strong>scholar.google.com</strong>, create a profile with your institutional email. Google Scholar automatically finds and links papers under your name. Your profile shows: list of papers, total citations, H-index, i10-index (papers with 10+ citations).</p>
+      <div class="tip-box">
+        <div class="tip-label">Tip</div>
+        Set your Google Scholar profile to "public" so anyone searching your name can find your work. This is your global academic business card.
+      </div>
+    </div>
+
+    <h3>How Citations Work</h3>
+    <div class="analogy">
+      <div class="analogy-label">Analogy</div>
+      When a politician gives a speech, journalists quote them. The more a politician is quoted, the more influential they are considered. Citations work the same way: when other researchers reference your paper in their work, that is a citation. More citations = more influence.
+    </div>
+    <p>Citations also create a chain of knowledge. Each paper acknowledges the "shoulders of giants" it stands on. Referencing properly tells readers: "I didn't invent this idea — I built on these existing works."</p>
+  </div>
+</div>
+
+<!-- SECTION: CONFERENCES -->
+<div class="section" id="sec-conferences">
+  <div class="chapter-header">
+    <div class="chapter-num">Chapter 9</div>
+    <h2>Conferences</h2>
+    <p class="chapter-lead">National, international, IEEE, Springer — how conferences work for beginners.</p>
+  </div>
+  <div class="content">
+    <h3>What is a Conference?</h3>
+    <div class="analogy">
+      <div class="analogy-label">Analogy</div>
+      A conference is like a science festival. Researchers from all over gather at one place (or online), present their latest work in short talks or poster sessions, exchange ideas, and network. Think of it as a TED Talk for engineers, but where everyone is presenting their own research.
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <tr><th>Type</th><th>Scope</th><th>Language</th><th>Prestige</th><th>Cost</th></tr>
+        <tr><td>National Conference</td><td>India only</td><td>English/Hindi</td><td>Lower</td><td>₹500–₹3,000</td></tr>
+        <tr><td>International Conference (India-based)</td><td>International submissions</td><td>English</td><td>Medium</td><td>₹2,000–₹8,000</td></tr>
+        <tr><td>IEEE Conference</td><td>Global</td><td>English</td><td>High</td><td>$100–$600</td></tr>
+        <tr><td>Springer Conference</td><td>Global</td><td>English</td><td>High</td><td>$100–$400</td></tr>
+        <tr><td>Scopus-indexed Conference</td><td>Global</td><td>English</td><td>Good</td><td>Varies</td></tr>
+      </table>
+    </div>
+
+    <h3>IEEE Conferences</h3>
+    <div class="card teal-border">
+      <p>IEEE (Institute of Electrical and Electronics Engineers) is the world's largest technical professional organization. Their conferences are well-respected in engineering. Papers published in IEEE conferences appear on <strong>IEEE Xplore</strong> and are often Scopus indexed.</p>
+      <p>Examples: IEEE ICIT, IEEE ICRA, IEEE ICCV, IEEE PEDS. Check upcoming conferences at <strong>conference.ieee.org</strong></p>
+    </div>
+
+    <h3>Springer Conferences (LNCS)</h3>
+    <div class="card gold-border">
+      <p>Springer publishes conference proceedings under the "Lecture Notes in Computer Science" (LNCS) and similar series. Well-regarded and often Scopus indexed. Good option for CS, AI, and engineering topics.</p>
+    </div>
+
+    <h3>The Conference Paper Process</h3>
+    <div class="steps">
+      <div class="step-item">
+        <div class="step-num">1</div>
+        <div class="step-content"><div class="step-title">Find a Call for Papers (CFP)</div>Conferences announce their topics and deadlines via CFP. Find them at WikiCFP.com or conference websites.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">2</div>
+        <div class="step-content"><div class="step-title">Write and submit your paper</div>Follow their template. Submit by the deadline.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">3</div>
+        <div class="step-content"><div class="step-title">Peer review (2–6 weeks)</div>Usually 2–3 reviewers evaluate it.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">4</div>
+        <div class="step-content"><div class="step-title">Accept or reject notification</div>You receive a decision email.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">5</div>
+        <div class="step-content"><div class="step-title">Register and present</div>Pay registration fee. Prepare 10–15 minute presentation or poster.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">6</div>
+        <div class="step-content"><div class="step-title">Paper published in proceedings</div>Your paper appears in conference proceedings — often on IEEE Xplore or SpringerLink.</div>
+      </div>
+    </div>
+
+    <h3>ISBN, ISSN, and DOI</h3>
+    <div class="table-wrap">
+      <table>
+        <tr><th>ID</th><th>Full Name</th><th>Used for</th><th>Example</th></tr>
+        <tr><td>ISSN</td><td>International Standard Serial Number</td><td>Journals and magazines (ongoing publications)</td><td>1234-5678</td></tr>
+        <tr><td>ISBN</td><td>International Standard Book Number</td><td>Books and conference proceedings (one-time)</td><td>978-3-16-148410-0</td></tr>
+        <tr><td>DOI</td><td>Digital Object Identifier</td><td>Individual papers/articles</td><td>10.1109/PROC.2023.12345</td></tr>
+      </table>
+    </div>
+
+    <div class="tip-box">
+      <div class="tip-label">Recommendation for Beginners</div>
+      Start with a conference paper. It's faster, cheaper, and less competitive. Once you gain confidence and have real results, move to indexed journals. A strong conference paper can also be extended into a journal paper later.
+    </div>
+  </div>
+</div>
+
+<!-- SECTION: CITATIONS -->
+<div class="section" id="sec-citations">
+  <div class="chapter-header">
+    <div class="chapter-num">Chapter 10</div>
+    <h2>Citations &amp; Referencing Styles</h2>
+    <p class="chapter-lead">IEEE, APA, MLA — why they matter and how they work.</p>
+  </div>
+  <div class="content">
+    <h3>Why Referencing Matters</h3>
+    <div class="analogy">
+      <div class="analogy-label">Analogy</div>
+      When you cook from a recipe you found online, crediting the original chef is basic honesty. In research, citing your sources is the same — it acknowledges whose ideas you built upon, allows readers to verify your claims, and gives credit where it belongs.
+    </div>
+
+    <h3>Citation Styles Compared</h3>
+    <div class="table-wrap">
+      <table>
+        <tr><th>Style</th><th>Used in</th><th>In-text format</th><th>Reference list format</th></tr>
+        <tr><td><strong>IEEE</strong></td><td>Engineering, Computer Science, Electronics</td><td>[1], [2], [3] — numbered in order of appearance</td><td>Numbered list at end</td></tr>
+        <tr><td><strong>APA</strong></td><td>Psychology, Social sciences, Management</td><td>(Smith, 2022) or Smith (2022)</td><td>Alphabetical by last name</td></tr>
+        <tr><td><strong>MLA</strong></td><td>Humanities, Literature, Arts</td><td>(Smith 45) — author + page</td><td>"Works Cited" alphabetical</td></tr>
+      </table>
+    </div>
+
+    <div class="card teal-border">
+      <h4>IEEE Style Example</h4>
+      <p style="font-size:13px">In text: "The method was first proposed in [5] and later improved in [6]."</p>
+      <p style="font-size:13px">In references: [5] A. Kumar, B. Sharma, and C. Singh, "A new method for image segmentation," <em>IEEE Trans. Image Process.</em>, vol. 32, pp. 112–125, Jan. 2023.</p>
+    </div>
+
+    <div class="card gold-border">
+      <h4>APA Style Example</h4>
+      <p style="font-size:13px">In text: "The efficiency was improved by 23% (Kumar et al., 2023)."</p>
+      <p style="font-size:13px">In references: Kumar, A., Sharma, B., &amp; Singh, C. (2023). A new method for image segmentation. <em>IEEE Transactions on Image Processing</em>, 32, 112–125.</p>
+    </div>
+
+    <h3>Reference Management Tools</h3>
+    <div class="grid-2">
+      <div class="mini-card" style="border-top:3px solid var(--teal)">
+        <div class="mini-card-title">Zotero (Free)</div>
+        Browser extension + desktop app. Collects papers automatically, generates citations in any style. Best free option.
+      </div>
+      <div class="mini-card" style="border-top:3px solid var(--navy)">
+        <div class="mini-card-title">Mendeley (Free)</div>
+        Elsevier's reference manager. Great for organizing and annotating PDFs. Also has social network features.
+      </div>
+      <div class="mini-card" style="border-top:3px solid var(--gold)">
+        <div class="mini-card-title">EndNote</div>
+        Powerful but expensive. Often available via university licenses.
+      </div>
+      <div class="mini-card" style="border-top:3px solid var(--accent-green)">
+        <div class="mini-card-title">Google Scholar + Copy cite</div>
+        Click "Cite" under any paper on Google Scholar to instantly get IEEE/APA/MLA formatted citation.
+      </div>
+    </div>
+
+    <div class="tip-box">
+      <div class="tip-label">Best Practice</div>
+      Use Zotero from Day 1. As you read papers, save them to Zotero. When writing your paper, insert citations with one click. It saves enormous time and eliminates formatting errors.
+    </div>
+  </div>
+</div>
+
+<!-- SECTION: ROADMAP -->
+<div class="section" id="sec-roadmap">
+  <div class="chapter-header">
+    <div class="chapter-num">Chapter 11</div>
+    <h2>Your Complete Roadmap</h2>
+    <p class="chapter-lead">From knowing nothing to publishing your first paper.</p>
+  </div>
+  <div class="content">
+    <h3>Common Mistakes Beginners Make</h3>
+    <div class="warning-box">
+      <div class="warning-label">Avoid These</div>
+    </div>
+    <div class="steps">
+      <div class="step-item">
+        <div class="step-num">✗</div>
+        <div class="step-content"><div class="step-title">Submitting to predatory journals</div>Always verify Scopus/WoS indexing before submission.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">✗</div>
+        <div class="step-content"><div class="step-title">High plagiarism (copy-pasting)</div>Every statement must be paraphrased. Even one paragraph copy-pasted can get your paper rejected.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">✗</div>
+        <div class="step-content"><div class="step-title">Ignoring the author guidelines</div>Wrong font, wrong reference style = instant rejection by editors.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">✗</div>
+        <div class="step-content"><div class="step-title">Not doing enough literature review</div>Reviewers know the field. If you miss 5 key papers, they will notice and reject.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">✗</div>
+        <div class="step-content"><div class="step-title">Giving up after first rejection</div>Every researcher faces rejection. Revise and resubmit. That's the process.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">✗</div>
+        <div class="step-content"><div class="step-title">No ORCID or researcher profiles</div>Create your profiles before or at time of first submission.</div>
+      </div>
+    </div>
+
+    <h3>The Beginner's Publication Timeline</h3>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-phase">Month 1–2</div>
+        <div class="tl-title">Foundation Phase</div>
+        <p style="font-size:13.5px">Learn what research is. Create ORCID. Create Google Scholar profile. Learn to search on Google Scholar and IEEE Xplore. Read 20 papers in your area of interest.</p>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot gold"></div>
+        <div class="tl-phase">Month 2–4</div>
+        <div class="tl-title">Topic Selection &amp; Deep Reading</div>
+        <p style="font-size:13.5px">Identify a specific research gap. Read 30–50 targeted papers. Discuss with supervisor. Define your research question and methodology.</p>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-phase">Month 3–6</div>
+        <div class="tl-title">Experimentation &amp; Data Collection</div>
+        <p style="font-size:13.5px">Do the actual research work — experiments, simulations, surveys, or data analysis. Document everything meticulously.</p>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot gold"></div>
+        <div class="tl-phase">Month 5–7</div>
+        <div class="tl-title">Writing Phase</div>
+        <p style="font-size:13.5px">Write the paper section by section. Start with Methodology (easiest), then Results, Introduction, Literature Review. Write Abstract last.</p>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-phase">Month 7</div>
+        <div class="tl-title">Review &amp; Submission</div>
+        <p style="font-size:13.5px">Plagiarism check, grammar check, supervisor review, format per journal guidelines. Submit.</p>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot teal"></div>
+        <div class="tl-phase">Month 7–12</div>
+        <div class="tl-title">Review Process</div>
+        <p style="font-size:13.5px">Wait for reviewer feedback. Respond to revisions. Resubmit. Accept minor/major revisions as part of the process.</p>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot teal"></div>
+        <div class="tl-phase">Month 9–14</div>
+        <div class="tl-title">Publication!</div>
+        <p style="font-size:13.5px">Accepted. Proofread. Published online. Share on ResearchGate, update Google Scholar profile. Celebrate — you're now a published researcher.</p>
+      </div>
+    </div>
+
+    <h3>Beginner Checklist</h3>
+    <ul class="checklist">
+      <li><span class="check-icon">☐</span>Created ORCID ID (orcid.org)</li>
+      <li><span class="check-icon">☐</span>Created Google Scholar Profile</li>
+      <li><span class="check-icon">☐</span>Created ResearchGate account</li>
+      <li><span class="check-icon">☐</span>Installed Zotero for reference management</li>
+      <li><span class="check-icon">☐</span>Read at least 20 papers in my research area</li>
+      <li><span class="check-icon">☐</span>Identified my research gap and topic</li>
+      <li><span class="check-icon">☐</span>Discussed topic with supervisor</li>
+      <li><span class="check-icon">☐</span>Verified target journal is Scopus/WoS indexed</li>
+      <li><span class="check-icon">☐</span>Downloaded journal's Author Guidelines template</li>
+      <li><span class="check-icon">☐</span>Run plagiarism check (below 15%)</li>
+      <li><span class="check-icon">☐</span>Grammar checked with Grammarly</li>
+      <li><span class="check-icon">☐</span>Supervisor has reviewed final draft</li>
+      <li><span class="check-icon">☐</span>All authors have approved the submission</li>
+      <li><span class="check-icon">☐</span>Submitted via journal's official editorial system</li>
+    </ul>
+
+    <h3>Final Summary Table</h3>
+    <div class="table-wrap">
+      <table>
+        <tr><th>Term</th><th>Simple Definition</th><th>Why Important</th></tr>
+        <tr><td>Research Paper</td><td>Document of an original study</td><td>Shares knowledge, proves work</td></tr>
+        <tr><td>Scopus</td><td>Largest paper database (Elsevier)</td><td>Quality standard in India/global</td></tr>
+        <tr><td>Web of Science</td><td>Premium paper database (Clarivate)</td><td>Most prestigious indexing</td></tr>
+        <tr><td>Impact Factor</td><td>Average citations per paper per year</td><td>Measures journal quality</td></tr>
+        <tr><td>H-index</td><td>Researcher's citation impact score</td><td>Career advancement metric</td></tr>
+        <tr><td>Q1 Journal</td><td>Top 25% in its field</td><td>Best target for career impact</td></tr>
+        <tr><td>DOI</td><td>Permanent ID number for a paper</td><td>Makes papers permanently findable</td></tr>
+        <tr><td>Peer Review</td><td>Expert check of your work before publication</td><td>Ensures quality and validity</td></tr>
+        <tr><td>APC</td><td>Fee to make paper openly accessible</td><td>Open access publishing model</td></tr>
+        <tr><td>ORCID</td><td>Your unique researcher ID</td><td>Required by most journals</td></tr>
+        <tr><td>Plagiarism</td><td>Using others' work without credit</td><td>Serious ethical violation</td></tr>
+        <tr><td>First Author</td><td>Main contributor to the paper</td><td>Gets most academic credit</td></tr>
+        <tr><td>UGC CARE</td><td>India's approved journal list</td><td>Required for Indian PhD/promotion</td></tr>
+        <tr><td>IEEE</td><td>World's largest engineering organization</td><td>Top conferences and journals</td></tr>
+        <tr><td>Citation Style</td><td>Format for referencing (IEEE/APA/MLA)</td><td>Must match journal requirement</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION: RESOURCES -->
+<div class="section" id="sec-resources">
+  <div class="chapter-header">
+    <div class="chapter-num">Chapter 12</div>
+    <h2>Free Resources &amp; Tools</h2>
+    <p class="chapter-lead">Everything you need to start — most of it completely free.</p>
+  </div>
+  <div class="content">
+    <h3>Essential Free Tools</h3>
+    <div class="grid-2">
+      <div class="mini-card" style="border-top:3px solid var(--teal)">
+        <div class="mini-card-title">Zotero</div>
+        Reference manager. Free. Works with Word, Google Docs. Must-have.
+        <br><small style="color:var(--muted)">zotero.org</small>
+      </div>
+      <div class="mini-card" style="border-top:3px solid var(--navy)">
+        <div class="mini-card-title">Grammarly</div>
+        Grammar and writing assistance. Free tier is sufficient.
+        <br><small style="color:var(--muted)">grammarly.com</small>
+      </div>
+      <div class="mini-card" style="border-top:3px solid var(--gold)">
+        <div class="mini-card-title">Overleaf</div>
+        Free LaTeX editor online. Many journals provide LaTeX templates.
+        <br><small style="color:var(--muted)">overleaf.com</small>
+      </div>
+      <div class="mini-card" style="border-top:3px solid var(--accent-green)">
+        <div class="mini-card-title">SciMago Journal Rank</div>
+        Check Scopus quartile (Q1–Q4) of any journal. Free.
+        <br><small style="color:var(--muted)">scimagojr.com</small>
+      </div>
+      <div class="mini-card" style="border-top:3px solid var(--teal)">
+        <div class="mini-card-title">WikiCFP</div>
+        Database of upcoming conferences. Find calls for papers.
+        <br><small style="color:var(--muted)">wikicfp.com</small>
+      </div>
+      <div class="mini-card" style="border-top:3px solid var(--navy)">
+        <div class="mini-card-title">DupliChecker</div>
+        Free basic plagiarism checker. Good for quick check before Turnitin.
+        <br><small style="color:var(--muted)">duplichecker.com</small>
+      </div>
+      <div class="mini-card" style="border-top:3px solid var(--gold)">
+        <div class="mini-card-title">Unpaywall / Open Access Button</div>
+        Browser extension that finds legal free versions of paywalled papers.
+        <br><small style="color:var(--muted)">unpaywall.org</small>
+      </div>
+      <div class="mini-card" style="border-top:3px solid var(--accent-green)">
+        <div class="mini-card-title">Mendeley</div>
+        Free reference manager + PDF organizer + researcher network.
+        <br><small style="color:var(--muted)">mendeley.com</small>
+      </div>
+    </div>
+
+    <h3>Key Websites to Bookmark</h3>
+    <div class="resource-item">
+      <div class="resource-icon">🔍</div>
+      <div><strong>scholar.google.com</strong> — Find any paper for free. Your first stop for literature search.</div>
+    </div>
+    <div class="resource-item">
+      <div class="resource-icon">📘</div>
+      <div><strong>ieeexplore.ieee.org</strong> — Engineering papers. Many abstracts free; full text via university.</div>
+    </div>
+    <div class="resource-item">
+      <div class="resource-icon">🌿</div>
+      <div><strong>researchgate.net</strong> — Social network for researchers. Download papers, contact authors.</div>
+    </div>
+    <div class="resource-item">
+      <div class="resource-icon">📊</div>
+      <div><strong>scopus.com/sources</strong> — Verify if a journal is indexed in Scopus.</div>
+    </div>
+    <div class="resource-item">
+      <div class="resource-icon">📋</div>
+      <div><strong>mjl.clarivate.com</strong> — Master Journal List. Verify Web of Science indexing.</div>
+    </div>
+    <div class="resource-item">
+      <div class="resource-icon">🔗</div>
+      <div><strong>orcid.org</strong> — Create your researcher ID.</div>
+    </div>
+    <div class="resource-item">
+      <div class="resource-icon">📚</div>
+      <div><strong>arxiv.org</strong> — Free preprint server. Upload your paper before formal publication.</div>
+    </div>
+    <div class="resource-item">
+      <div class="resource-icon">⚠️</div>
+      <div><strong>beallslist.net</strong> — List of predatory publishers. Check before submitting.</div>
+    </div>
+    <div class="resource-item">
+      <div class="resource-icon">🇮🇳</div>
+      <div><strong>ugccare.unipune.ac.in</strong> — Official UGC CARE approved journal list for India.</div>
+    </div>
+
+    <h3>YouTube Channels for Learning</h3>
+    <div class="grid-2">
+      <div class="mini-card" style="border-left:3px solid red">
+        <div class="mini-card-title">Researcher.Life</div>
+        Excellent tutorials on paper writing, peer review, publication process.
+      </div>
+      <div class="mini-card" style="border-left:3px solid red">
+        <div class="mini-card-title">Wordvice Editing</div>
+        Academic English writing tips, abstract writing, responding to reviewers.
+      </div>
+      <div class="mini-card" style="border-left:3px solid red">
+        <div class="mini-card-title">Dr. Amina Yousaf</div>
+        Research methodology, thesis writing, literature review tutorials.
+      </div>
+      <div class="mini-card" style="border-left:3px solid red">
+        <div class="mini-card-title">Academic English Now</div>
+        Writing academic papers, paraphrasing, hedging language for non-native speakers.
+      </div>
+    </div>
+
+    <h3>Low-Cost / Free Publishing Options for Beginners</h3>
+    <div class="card green-border">
+      <div class="steps">
+        <div class="step-item">
+          <div class="step-num">1</div>
+          <div class="step-content"><div class="step-title">IEEE conferences</div>Many IEEE conferences have registration fees of $100–200. But proceedings are indexed and respected.</div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">2</div>
+          <div class="step-content"><div class="step-title">MDPI journals</div>APC waivers available for authors from low-income countries. Apply during submission.</div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">3</div>
+          <div class="step-content"><div class="step-title">Subscription journals (free to publish)</div>Many top journals (IEEE Trans., Elsevier without OA) are free to publish in — readers pay, not authors.</div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">4</div>
+          <div class="step-content"><div class="step-title">University-funded APC</div>Ask your institution — many Indian universities have funds specifically for publication fees.</div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">5</div>
+          <div class="step-content"><div class="step-title">arXiv + later journal submission</div>Post on arXiv.org immediately for free. Submit to a journal afterward. Your work is visible while under review.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card gold-border" style="margin-top:32px">
+      <h4>Final Words of Encouragement</h4>
+      <p>Research is a marathon, not a sprint. Every expert you look up to started exactly where you are — with no papers, no citations, no knowledge of how any of this worked. The only difference is they started. Your first paper will be imperfect. Submit it anyway. The second will be better. The tenth will be excellent. The journey begins with curiosity and courage — you already have both.</p>
+      <p style="color:var(--gold); font-weight:600; margin-top:12px">Good luck, researcher. The world needs what you will discover.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+function showSection(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+  document.getElementById('sec-' + id).classList.add('active');
+  event.target.classList.add('active');
+  window.scrollTo(0, 0);
+}
+</script>
